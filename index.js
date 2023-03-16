@@ -4,7 +4,6 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-var { SendMailClient } = require("zeptomail");
 
 const sendpulse = require("sendpulse-api");
 
@@ -15,12 +14,36 @@ const TOKEN_STORAGE = "/tmp/";
 const PORT = process.env.PORT || 4000;
 const url = "api.zeptomail.com/";
 const token = process.env["ZOHO_TOKEN"];
-const client = new SendMailClient({ url, token });
 
 app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function () {
+  console.log("SendPulse API initialized");
+});
+
+app.post("/bulk-emails", (req, res) => {
+  const { subject, sender_name, sender_email, to, bcc, html, textbody } =
+    req.body;
+
+  var answerGetter = function (data) {
+    res.send(data);
+  };
+  let email = {
+    html: html,
+    subject: subject,
+    textbody: textbody,
+    from: {
+      name: sender_name,
+      email: sender_email,
+    },
+    to: to,
+  };
+
+  sendpulse.smtpSendMail(answerGetter, email);
+});
 
 app.post("/send-email", (req, res) => {
   const { address, name } = req.body;
@@ -464,32 +487,6 @@ app.post("/send-email", (req, res) => {
     };
     sendpulse.smtpSendMail(answerGetter, email);
   });
-
-  // client
-  //   .sendMail({
-  //     bounce_address: "info@bounce.theablestate.com",
-  //     from: {
-  //       address: "noreply@theablestate.com",
-  //       name: "Ablestate Talent",
-  //     },
-  //     to: [
-  //       {
-  //         email_address: {
-  //           address: address,
-  //           name: name,
-  //         },
-  //       },
-  //     ],
-  //   subject: "Welcome to Ablestate Talent",
-  //   textbody: `Hey ${name}, we are happy to see you. You are welcome to the Ablestate talent. Please fill in your information to get your relevant job opportunities.`,
-  //   htmlbody: `Hey ${name},
-  //    <br />
-  //    We are happy to see you. You are welcome to the Ablestate talent. Please fill in your information to get your relevant job opportunities.`,
-  //   track_clicks: true,
-  //   track_opens: true,
-  // })
-  //   .then((response) => res.send(response))
-  //   .catch((error) => res.send(error));
 });
 
 /* 
