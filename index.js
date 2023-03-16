@@ -4,8 +4,13 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const { createClient } = require("@supabase/supabase-js");
 
 const sendpulse = require("sendpulse-api");
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const API_USER_ID = process.env.SEND_PULSE_ID;
 const API_SECRET = process.env.SEND_PULSE_SECRET;
@@ -22,6 +27,28 @@ app.use(express.urlencoded({ extended: true }));
 
 sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function () {
   console.log("SendPulse API initialized");
+});
+
+app.post("/add-customer-support", async (req, res) => {
+  const { email, password, fullName, role } = req.body;
+
+  try {
+    const { data: user, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      email_confirm: true,
+      options: {
+        data: {
+          fullname: fullName,
+          user_role: role,
+        },
+      },
+    });
+
+    res.send({ message: user });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post("/bulk-emails", (req, res) => {
