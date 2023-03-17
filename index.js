@@ -1,11 +1,10 @@
 const express = require("express");
 require("dotenv").config();
-const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const app = express();
 const userRouters = require("./routes/user");
-
 const sendpulse = require("sendpulse-api");
 
 const API_USER_ID = process.env.SEND_PULSE_ID;
