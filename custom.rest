@@ -1,0 +1,17 @@
+POST http://localhost:4000/api/users/add-user
+Content-Type: application/json
+
+{
+  "email": "chucknorris@gmail.com",
+  "password": "password",
+  "fullName": "Chuck Norris",
+  "role": "customer_support"
+}
+
+###
+POST http://localhost:4000/api/users/delete-user
+Content-Type: application/json
+
+{
+  "id": "4e64c4e2-5d6f-455c-8d90-9f7056e5ffdd"
+}
