@@ -29,20 +29,36 @@ app.post("/bulk-emails", (req, res) => {
     req.body;
 
   var answerGetter = function (data) {
-    res.send(data);
+    // res.send(data);
   };
-  let email = {
-    html: html,
-    subject: subject,
-    textbody: textbody,
-    from: {
-      name: sender_name,
-      email: sender_email,
-    },
-    to: to,
-  };
+  // let email = {
+  //   html: html,
+  //   subject: subject,
+  //   textbody: textbody,
+  //   from: {
+  //     name: sender_name,
+  //     email: sender_email,
+  //   },
+  //   to: to,
+  // };
 
-  sendpulse.smtpSendMail(answerGetter, email);
+  to &&
+    to.forEach((receiver, index) => {
+      console.log(receiver);
+      let email = {
+        html: html,
+        subject: subject,
+        textbody: textbody,
+        from: {
+          name: sender_name,
+          email: sender_email,
+        },
+        to: [receiver],
+      };
+      sendpulse.smtpSendMail(answerGetter, email);
+    });
+
+  res.send({ message: "complete" });
 });
 
 app.post("/send-email", (req, res) => {
