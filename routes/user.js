@@ -16,19 +16,17 @@ router.post("/add-user", async (req, res) => {
       user_metadata: { fullname: fullName, user_role: role, email: email },
     });
     if (error) {
-      res.send({ status: "failed", message: error });
+      res.status(500).send({ status: "failed", message: error });
     } else {
-      res.send({ status: "success", message: user });
+      res.status(200).send({ status: "success", message: user });
     }
   } catch (error) {
-    console.log("this is the error: ", error);
-    res.send({ status: "failed", message: error });
+    res.status(500).send({ status: "failed", message: error });
   }
 });
 
 router.post("/delete-user", async (req, res) => {
   const { id } = req.body;
-  // console.log("user's id: ", id);
 
   try {
     const { data: user, error } = await supabase.auth.admin.deleteUser(id);

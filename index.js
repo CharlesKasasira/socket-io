@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const app = express();
 const userRouters = require("./routes/user");
+const emailRouters = require("./routes/email");
 const sendpulse = require("sendpulse-api");
 
 const API_USER_ID = process.env.SEND_PULSE_ID;
@@ -19,46 +20,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", userRouters);
+app.use("/api/emails", emailRouters);
 
 sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function () {
   console.log("SendPulse API initialized");
-});
-
-app.post("/bulk-emails", (req, res) => {
-  const { subject, sender_name, sender_email, to, bcc, html, textbody } =
-    req.body;
-
-  var answerGetter = function (data) {
-    // res.send(data);
-  };
-  // let email = {
-  //   html: html,
-  //   subject: subject,
-  //   textbody: textbody,
-  //   from: {
-  //     name: sender_name,
-  //     email: sender_email,
-  //   },
-  //   to: to,
-  // };
-
-  to &&
-    to.forEach((receiver, index) => {
-      console.log(receiver);
-      let email = {
-        html: html,
-        subject: subject,
-        textbody: textbody,
-        from: {
-          name: sender_name,
-          email: sender_email,
-        },
-        to: [receiver],
-      };
-      sendpulse.smtpSendMail(answerGetter, email);
-    });
-
-  res.send({ message: "complete" });
 });
 
 app.post("/send-email", (req, res) => {
@@ -543,7 +508,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
-    console.log(data);
     const {
       receiver_id,
       receiver_email,
@@ -554,7 +518,6 @@ io.on("connection", (socket) => {
 
     var answerGetter = function (data) {
       // res.send(data);
-      console.log(data);
     };
 
     sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function () {
