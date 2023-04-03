@@ -6,6 +6,7 @@ const cors = require("cors");
 const app = express();
 const userRouters = require("./routes/user");
 const emailRouters = require("./routes/email");
+const billsRouters = require("./routes/bills");
 const sendpulse = require("sendpulse-api");
 
 const API_USER_ID = process.env.SEND_PULSE_ID;
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", userRouters);
 app.use("/api/emails", emailRouters);
+app.use("/api/bills/", billsRouters);
 
 sendpulse.init(API_USER_ID, API_SECRET, TOKEN_STORAGE, function () {
   console.log("SendPulse API initialized");
