@@ -31,13 +31,11 @@ router.post("/delete-user", async (req, res) => {
   try {
     const { data: user, error } = await supabase.auth.admin.deleteUser(id);
     if (error) {
-      console.log("error: ", error.message);
       res.status(500).json({ message: error });
     } else {
       res.status(200).json({ message: user });
     }
   } catch (error) {
-    console.log("this is the error: ", error);
     res.status(400).json({ message: error });
   }
 });
