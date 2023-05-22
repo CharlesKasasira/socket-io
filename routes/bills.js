@@ -61,9 +61,9 @@ router.post("/send-expired-emails", (req, res) => {
           message: `Your website ${website.name.toUpperCase()} (${
             website.website_link
           }) will expiry in a day. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        })
-          // .then((response) => console.log("message: ", response))
-          // .catch((error) => console.log("message: ", error));
+        });
+        // .then((response) => console.log("message: ", response))
+        // .catch((error) => console.log("message: ", error));
       });
     // .then((response) => res.send({ message: response }));
 
