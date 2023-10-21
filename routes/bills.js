@@ -15,7 +15,6 @@ const client = africastalking({
 });
 
 router.post("/send-expired-emails", (req, res) => {
-  console.log(req.body);
   try {
     req.body?.day &&
       req.body?.day.forEach((website, index) => {
@@ -56,16 +55,17 @@ router.post("/send-expired-emails", (req, res) => {
           .then()
           .catch();
 
-        client.SMS.send({
-          to: `+${website.telephone_number}`,
-          message: `Your website ${website.name.toUpperCase()} (${
-            website.website_link
-          }) will expiry in a day. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        });
-        // .then((response) => console.log("message: ", response))
-        // .catch((error) => console.log("message: ", error));
+        try {
+          client.SMS.send({
+            to: `+${website.telephone_number}`,
+            message: `Your website ${website.name.toUpperCase()} (${
+              website.website_link
+            }) will expiry in a day. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
+          });
+        } catch(error) {
+          console.log(error.message)
+        }
       });
-    // .then((response) => res.send({ message: response }));
 
     req.body?.day4 &&
       req.body.managers.forEach((manager, index) => {
@@ -103,14 +103,19 @@ router.post("/send-expired-emails", (req, res) => {
             .then()
             .catch();
 
-          if (manager?.contact_number) {
-            client.SMS.send({
-              to: `+${website.telephone_number}`,
-              message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
-            });
-            // .then((response) => res.status(200).json(response))
-            // .catch((error) => res.status(503).json(error));
-          }
+          
+            try {
+              if (manager?.contact_number) {
+                client.SMS.send({
+                  to: `+${website.telephone_number}`,
+                  message: `${website.website_link} is expiring in less than a week but has not be renewed yet. `,
+                });
+              }
+            } catch(error) {
+              console.log(error.message)
+            }
+
+          
         });
       });
 
@@ -153,14 +158,18 @@ router.post("/send-expired-emails", (req, res) => {
           .then()
           .catch();
 
-        client.SMS.send({
-          to: `+${website.telephone_number}`,
-          message: `Your website ${website.name.toUpperCase()} (${
-            website.website_link
-          }) will expiry in a week. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        });
-        // .then((response) => res.status(200).json(response))
-        // .catch((error) => res.status(503).json(error));
+
+          try {
+            client.SMS.send({
+              to: `+${website.telephone_number}`,
+              message: `Your website ${website.name.toUpperCase()} (${
+                website.website_link
+              }) will expiry in a week. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
+            });
+          } catch(error) {
+            console.log(error.message)
+          }
+
       });
 
     req.body?.month &&
@@ -202,14 +211,18 @@ router.post("/send-expired-emails", (req, res) => {
           .then()
           .catch();
 
-        client.SMS.send({
-          to: `+${website.telephone_number}`,
-          message: `Your website ${website.name.toUpperCase()} (${
-            website.website_link
-          }) will expiry in a month. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        });
-        // .then((response) => res.status(200).json(response))
-        // .catch((error) => res.status(503).json(error));
+
+          try {
+            client.SMS.send({
+              to: `+${website.telephone_number}`,
+              message: `Your website ${website.name.toUpperCase()} (${
+                website.website_link
+              }) will expiry in a month. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
+            });
+          } catch(error) {
+            console.log(error.message)
+          }
+
       });
 
     req.body?.two_months &&
@@ -251,14 +264,18 @@ router.post("/send-expired-emails", (req, res) => {
           .then()
           .catch();
 
-        client.SMS.send({
-          to: `+${website.telephone_number}`,
-          message: `Your website ${website.name.toUpperCase()} (${
-            website.website_link
-          }) will expiry in a 60 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        });
-        // .then((response) => res.status(200).json(response))
-        // .catch((error) => res.status(503).json(error));
+          try {
+            client.SMS.send({
+              to: `+${website.telephone_number}`,
+              message: `Your website ${website.name.toUpperCase()} (${
+                website.website_link
+              }) will expiry in a 60 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
+            });
+          } catch(error) {
+            console.log(error.message)
+          }
+
+        
       });
 
     req.body?.expired_3days &&
@@ -299,14 +316,18 @@ router.post("/send-expired-emails", (req, res) => {
           .then()
           .catch();
 
-        client.SMS.send({
-          to: `+${website.telephone_number}`,
-          message: `Your website ${website.name.toUpperCase()} (${
-            website.website_link
-          }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        });
-        // .then((response) => res.status(200).json(response))
-        // .catch((error) => res.status(503).json(error));
+          try {
+            client.SMS.send({
+              to: `+${website.telephone_number}`,
+              message: `Your website ${website.name.toUpperCase()} (${
+                website.website_link
+              }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
+            });
+          } catch(error) {
+            console.log(error.message)
+          }
+
+        
       });
 
     req.body?.expired_week_ago &&
@@ -347,14 +368,18 @@ router.post("/send-expired-emails", (req, res) => {
           .then()
           .catch();
 
-        client.SMS.send({
-          to: `+${website.telephone_number}`,
-          message: `Your website ${website.name.toUpperCase()} (${
-            website.website_link
-          }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
-        });
-        // .then((response) => res.status(200).json(response))
-        // .catch((error) => res.status(503).json(error));
+          try {
+            client.SMS.send({
+              to: `+${website.telephone_number}`,
+              message: `Your website ${website.name.toUpperCase()} (${
+                website.website_link
+              }) will expired a 3 days. Please login in to https://bills.ablestate.co to make payment. If you require any further information, let us know.`,
+            });
+          } catch(error) {
+            console.log(error.message)
+          }
+
+        
       });
 
     res.send({ message: "Complete" });
